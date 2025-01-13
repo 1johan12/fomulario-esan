@@ -3,12 +3,14 @@
         <img class="object-cover object-center w-full h-[150px]" src="<?= $basePath ?>assets/banner.jpg" alt="">
     </div>
     <div class="flex flex-col justify-center items-center gap-3 py-3">
+        <a href="<?=$basePath?>docs/6781813514029_Libro1.pdf" target="_blank">
         <div class="flex justify-center gap-2.5">
-            <h5 class="font-semibold text-[#4A494A]">Bases del campeonato</h5>
-            <div class="flex px-[5px] py-px rounded-[50px] border-2 border-solid border-[#FF103D]">
-                <i class="fa-solid fa-arrow-down h-5 flex justify-center text-[#FF103D] items-center"></i>
+                <h5 class="font-semibold text-[#4A494A]">Bases del campeonato</h5>
+                <div class="flex px-[5px] py-px rounded-[50px] border-2 border-solid border-[#FF103D]">
+                    <i class="fa-solid fa-arrow-down h-5 flex justify-center text-[#FF103D] items-center"></i>
+                </div>
             </div>
-        </div>
+        </a>
         <div class=" px-16 flex flex-col gap-7 border border-solid border-[#EBEBEB] w-[700px]">
             <h1 class=" pt-5 font-bold text-xl uppercase text-center">Ficha de registro</h1>
             <div class="">
@@ -16,7 +18,8 @@
                     <h2 class="font-bold text-base uppercase text-white">Datos de la institución</h2>
                 </div>
                 <div class="pt-7 grid grid-cols-2 gap-x-10 gap-y-8">
-                    <input class="border-b border-solid border-b-black focus:outline-none py-2" type="text" placeholder="Nombre del colegio">
+                    <input class="border-b border-solid border-b-black focus:outline-none py-2" type="text"
+                        placeholder="Nombre del colegio">
                     <!-- <input class="border-b border-solid border-b-black focus:outline-none py-2" type="text" placeholder="Departamento">
                     <input class="border-b border-solid border-b-black focus:outline-none py-2" type="text" placeholder="Provincia">
                     <input class="border-b border-solid border-b-black focus:outline-none py-2" type="text" placeholder="Distrito"> -->
@@ -41,7 +44,8 @@
                 <div class="px-8 py-1 rounded-xl bg-[#FF103D]">
                     <h2 class="font-bold text-base uppercase text-white">Datos del equipo</h2>
                 </div>
-                <button id="btn-add-speaker" class="flex align-middle items-center gap-1 disabled:cursor-not-allowed" onclick="participantType='orador';fnShowModal();setTitleModal('Añadir Orador');">
+                <button id="btn-add-speaker" class="flex align-middle items-center gap-1 disabled:cursor-not-allowed"
+                    onclick="participantType='orador';fnShowModal();setTitleModal('Añadir Orador');">
                     <i class="fa-solid fa-circle-plus text-[#FF103D] text-base"></i>
                     <h5>Añadir orador</h5>
                 </button>
@@ -58,7 +62,8 @@
                         </div>
                     </div> -->
                 </div>
-                <button id="btn-add-teacher" class="flex align-middle items-center gap-1 disabled:cursor-not-allowed" onclick="participantType='profesor';fnShowModal();setTitleModal('Añadir profesor responsable')">
+                <button id="btn-add-teacher" class="flex align-middle items-center gap-1 disabled:cursor-not-allowed"
+                    onclick="participantType='profesor';fnShowModal();setTitleModal('Añadir profesor responsable')">
                     <i class="fa-solid fa-circle-plus text-[#FF103D] text-base"></i>
                     <h5>Añadir profesor responsable</h5>
                 </button>
@@ -68,7 +73,8 @@
             <div class="pb-4">
                 <div class="flex flex-col gap-1 border border-solid border-black text-center text-sm">
                     <p>
-                        Para poder utilizar las fotografias y videos en los que participes, por favor descarga este Consentimiento para el tratamiento
+                        Para poder utilizar las fotografias y videos en los que participes, por favor descarga este
+                        Consentimiento para el tratamiento
                         de Datos Personales y Acuerdo de Uso de Imagen y adjúntalo en el formulario.
                     </p>
                     <span class="text-[#FF103D] font-bold">*Formato para participantes*</span>
@@ -77,7 +83,8 @@
                 <div class="flex flex-col gap-2 pt-10 mx-5 text-sm">
                     <div class="flex gap-2 justify-start items-start">
                         <input class="authorizationCheckId" type="checkbox" id="check1">
-                        <p class="text-[#FF103D] font-semibold -mt-1">Acepto las condiciones de tratamiento para mis datos personales</p>
+                        <p class="text-[#FF103D] font-semibold -mt-1">Acepto las condiciones de tratamiento para mis
+                            datos personales</p>
                     </div>
                     <div class="flex justify-start items-start gap-2">
                         <input class="authorizationCheckId" type="checkbox" id="check2">
@@ -308,9 +315,9 @@
                     console.log("file2");
 
                     uploadPromise = fetch('upload.php', {
-                            method: 'POST',
-                            body: formData,
-                        })
+                        method: 'POST',
+                        body: formData,
+                    })
                         .then(response => response.json())
                         .then(result => {
                             console.log("Archivo subido:", result);
@@ -360,14 +367,10 @@
     function fnPrevListSpeakers(params) {
         speakersPrevContainer.innerHTML = ""
         teacherPrevContainer.innerHTML = ""
-        const oradores = speakers.filter(speaker => speaker.participantType === 'orador');
-        if(oradores.length >= 1 ){
-            console.log("oradores 1");
-            btnAddSpeaker.disabled = "true";
-        }else{
-            btnAddSpeaker.disabled = "false";
-
-        }
+        const speakersNumber = speakers.filter(speaker => speaker.participantType === 'orador');
+        const teacherNumber = speakers.filter(speaker => speaker.participantType === 'profesor');
+        fnLimitParticipants(speakersNumber.length, "speaker");
+        fnLimitParticipants(teacherNumber.length, "teacher");
         speakers.forEach(element => {
             console.log(element.name);
             const speakerHTML = participants(element);
@@ -377,6 +380,32 @@
                 teacherPrevContainer.insertAdjacentHTML("beforeend", speakerHTML);
             }
         });
+
+    }
+
+    function fnLimitParticipants(numberParticipants, type) {
+        console.log("Limit Participants", type, numberParticipants);
+        // console.log("Limit Participants",numberParticipants);
+
+        switch (type) {
+            case "speaker":
+                if (numberParticipants === 3) {
+                    console.log("speaker 3");
+                    btnAddSpeaker.disabled = true;
+                } else {
+                    btnAddSpeaker.disabled = false;
+                }
+                break;
+            case "teacher":
+                if (numberParticipants === 1) {
+                    console.log("teacher 1");
+                    btnAddTeacher.disabled = true;
+                } else {
+                    btnAddTeacher.disabled = false;
+                }
+                break;
+        }
+
     }
 
     function participants(element) {
@@ -393,7 +422,6 @@
             </div>
         </div>
         `
-
         return speakerHTML;
     }
 </script>
