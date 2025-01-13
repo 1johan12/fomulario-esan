@@ -4,6 +4,7 @@
         <div class="flex justify-between w-full p-4 border-b bg-[#ff103d] border-[#e9ecef] border-solid items-center text-[1.25rem] rounded-t-lg">
             <div class="font-medium text-white">
                 <h2 id="titleModal"></h2>
+                <span class="hidden participantPosition"></span>
             </div>
             <button onclick="fnCloseModal()">
                 <i class="fa-solid fa-xmark text-[#fff]"></i>
@@ -19,15 +20,9 @@
             <div class="grow flex flex-col relative">
                 <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="maternalname" type="text" placeholder="Apellido materno" onkeyup="validateInput(this,'maternalname-error')">
             </div>
-            <!-- <div class="grow flex flex-col relative">
-                <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="dni" type="number" placeholder="DNI" onkeyup="validateInput(this,'dni-error')">
-            </div> -->
             <div class="grow flex flex-col relative">
                 <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="email" type="email" placeholder="E-mail" onkeyup="validateInput(this,'email-error')">
             </div>
-            <!-- <div class="grow flex flex-col relative">
-                <input class="w-full grow border border-solid focus:outline-none rounded-lg p-2 mb-5" name="email2" id="email2" type="email" placeholder="Repetir E-mail" onkeyup="validateInput(this,'email-repeat-error')">
-            </div> -->
             <div class="w-full flex flex-col sm:flex-row sm:gap-4">
                 <div class="w-full  flex flex-col relative">
                     <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="age" type="text" min="1" max="99" placeholder="Edad" onkeyup="validateInput(this,'age-error')">
@@ -38,7 +33,6 @@
                         <option value="masculino">Masculino</option>
                         <option value="femenino">Femenino</option>
                     </select>
-                    <!-- <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="race" type="text" placeholder="Género" onkeyup="validateInput(this,'race-error')"> -->
                 </div>
             </div>
             <div class="w-full flex flex-col sm:flex-row sm:gap-4">
@@ -66,7 +60,8 @@
         </div>
         <div class=" w-full border-t border-t-solid border-t-[#e9ecef] p-4 flex justify-end gap-2">
             <button class="px-3 py-[6px] bg-[#ff103d] text-white rounded-md text-base" onclick="fnCloseModal()">Cancel</button>
-            <button class="px-3 py-[6px] bg-[#6c757d] text-white rounded-md text-base tracking-wide disabled:cursor-not-allowed" id="btn-save-speaker" onclick="fnAddSpeaker()" disabled>Agregar</button>
+            <button class="px-3 py-[6px] bg-[#6c757d] text-white rounded-md text-base tracking-wide disabled:cursor-not-allowed" id="btn-save-speaker" onclick="isSaveOrUpdate()" disabled>Agregar</button>
+            <!-- <button class="px-3 py-[6px] bg-[#6c757d] text-white rounded-md text-base tracking-wide disabled:cursor-not-allowed" id="btn-update-speaker" onclick="fnUpdateData()" disabled>Actualizar</button> -->
         </div>
     </div>
 </div>
@@ -75,11 +70,16 @@
 
     const containDegree = document.getElementById("container-degree");
     const containPhone = document.getElementById("container-phone");
+    const btnModal = document.getElementById("btn-save-speaker");
     function setTitleModal(participant) {
-        console.log("participantType",participantType);
+        console.log("participantType",participantType,participant);
         
         document.getElementById("titleModal").textContent = participant;
-        if (participant.includes("profesor")) {
+        if(participant.toLowerCase().includes("actualizar")) document.getElementById("btn-save-speaker").textContent = "Actualizar";
+        
+        // document.getElementById("titleModal").textContent = participant;
+        if (participant.toLowerCase().includes("profesor")) {
+            
             containDegree.classList.add("hidden");
             containPhone.classList.remove("w-full");
             containPhone.classList.add("w-1/2","pr-2");
@@ -88,5 +88,10 @@
             containPhone.classList.add("w-full");
             containPhone.classList.remove("w-1/2","pr-2");
         }
+    }
+
+    function isSaveOrUpdate(){
+        if(document.getElementById("titleModal").textContent.toLowerCase().includes("actualizar")) fnUpdatedata();
+        else fnSaveData();
     }
 </script>

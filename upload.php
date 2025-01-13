@@ -12,10 +12,11 @@ if (isset($_FILES['file'])) {
     }
 
     if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadFile)) {
-        echo json_encode(['success' => true, 'filePath' => 'files/' . $fileName]);
+        echo json_encode(['success' => true, 'filePath' => $_POST['basePath'] . 'files/' . $fileName]);
     } else {
         echo json_encode(['success' => false, 'error' => 'Error al mover el archivo al directorio de destino.']);
     }
 } else {
     echo json_encode(['success' => false, 'error' => 'No se recibió ningún archivo.']);
 }
+?>
