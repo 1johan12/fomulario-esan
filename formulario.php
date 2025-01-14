@@ -120,7 +120,7 @@
             age: "18",
             race: "masculino",
             phone: "123456789",
-            file: "http://localhost:8090/formulario/files/67856f61400cc_67856f4dd3f93_678540058d719_Libro1.pdf"
+            file: "http://localhost:8090/formulario/files/678597761f0ce_Libro1.pdf"
         },
         {
             participantType: "speaker",
@@ -132,7 +132,7 @@
             race: "masculino",
             degree: "1",
             phone: "123456789",
-            file: "http://localhost:8090/formulario/files/67856f61400cc_67856f4dd3f93_678540058d719_Libro1.pdf"
+            file: "http://localhost:8090/formulario/files/678597761f0ce_Libro1.pdf"
         },
         {
             participantType: "speaker",
@@ -143,7 +143,7 @@
             age: "18",
             race: "masculino",
             phone: "123456789",
-            file: "http://localhost:8090/formulario/files/67856f61400cc_67856f4dd3f93_678540058d719_Libro1.pdf"
+            file: "http://localhost:8090/formulario/files/678597761f0ce_Libro1.pdf"
         },
         {
             participantType: "speaker",
@@ -154,7 +154,7 @@
             age: "18",
             race: "masculino",
             phone: "123456789",
-            file: "http://localhost:8090/formulario/files/67856f61400cc_67856f4dd3f93_678540058d719_Libro1.pdf"
+            file: "http://localhost:8090/formulario/files/678597761f0ce_Libro1.pdf"
         }
     ]
     let inputId = [];
@@ -421,10 +421,101 @@
         fnPrevListSpeakers();
     }
 
-    function fnUpdatedata() {
-        
-        console.log("fnUpdatedata",participantPosition.id);
+    async function fnUpdatedata() {
+        console.log("==============================================");
+        const currentData = speakers[participantPosition.id];
+        const promises = []; // Promesas para manejar la subida del archivo
+        const basePath = <?= json_encode($basePath) ?>; // Evitar múltiples llamadas a PHP
+
+        inputId.forEach(async (id) => {
+            const input = document.getElementById(id);
+
+            if (id === "file") {
+                const file = input.files[0];
+                if (file) {
+                    const filePathNew = `${basePath}files/${file.name}`;
+                    if (currentData[id]?.toLowerCase() === filePathNew.toLowerCase()) {
+                        console.log("Archivo sin cambios:", currentData[id]);
+                    } else {
+                        const formData = new FormData();
+                        formData.append("file", file);
+                        formData.append('basePath', <?= json_encode($basePath) ?>);
+
+
+                        try {
+                            const response = await fetch("upload.php", {
+                                method: "POST",
+                                body: formData,
+                            });
+                            const result = await response.json();
+
+                            if (result.success) {
+                                console.log("Archivo actualizado con éxito:", result.filePath);
+
+                                if (currentData[id]) {
+                                    promises.push(deleteOldFile(currentData[id]));
+                                }
+
+                                currentData[id] = result.filePath;
+                            } else {
+                                console.error("Error al subir el archivo:", result.error);
+                                alert("No se pudo actualizar el archivo.");
+                            }
+                        } catch (error) {
+                            console.error("Error en la subida del archivo:", error);
+                            alert("Error al subir el archivo.");
+                        }
+                    }
+                }
+            } else {
+                currentData[id] = input.value;
+            }
+        });
+
+        if (promises.length > 0) {
+            await Promise.all(promises);
+        }
+
+        speakers[participantPosition.id] = currentData;
+
+        fnPrevListSpeakers();
+
+        console.log("Datos actualizados:", currentData);
+        console.log("==============================================");
     }
+
+    async function deleteOldFile(filePath) {
+        console.log("deleteOldFile",filePath);
+        
+        try {
+            const response = await fetch("delete_file.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    filePath, // Pasar ruta del archivo
+                }),
+            });
+
+            if (!response.ok) {
+                console.error("Error HTTP:", response.status, response.statusText);
+                throw new Error(`HTTP error: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            if (result.success) {
+                console.log("Archivo eliminado con éxito:", filePath);
+            } else {
+                console.error("Error al eliminar el archivo (servidor):", result.error);
+            }
+        } catch (error) {
+            console.error("Error en la solicitud de eliminación:", error.message || error);
+        }
+    }
+
+
 
     function activateButtonAddSpeaker() {
         console.log("Function activateButtonAddSpeaker", inputId.length, " ", participantType);
@@ -539,7 +630,7 @@
             "phone",
             "file"
         ]
-        if(text.toLowerCase().includes("orador")) inputId.push("degree");
+        if (text.toLowerCase().includes("orador")) inputId.push("degree");
         editName.value = data.name;
         editPaternalname.value = data.paternalname;
         editMaternalname.value = data.maternalname;
