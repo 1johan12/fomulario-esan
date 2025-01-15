@@ -18,19 +18,19 @@
                     <h2 class="font-bold text-base uppercase text-white">Datos de la institución</h2>
                 </div>
                 <div class="pt-7 grid grid-cols-2 gap-x-10 gap-y-8">
-                    <input class="border-b border-solid border-b-black focus:outline-none py-2" type="text"
+                    <input class="border-b border-solid border-b-black focus:outline-none py-2" onkeyup="fnActiveOrDeactivateBtnSendDataTeam(this.value.length >= 3,this)" type="text"
                         placeholder="Nombre del colegio" id="schoolName">
-                    <select class="border-b border-solid border-b-black focus:outline-none py-2" id="department">
+                    <select class="border-b border-solid border-b-black focus:outline-none py-2" id="department" onchange="fnActiveOrDeactivateBtnSendDataTeam(this.value.length >= 3,this)">
                         <option value="">Selecciona un departamento</option>
                         <option value="lima">Lima</option>
                         <option value="arequipa">Arequipa</option>
                     </select>
-                    <select class="border-b border-solid border-b-black focus:outline-none py-2" id="province">
+                    <select class="border-b border-solid border-b-black focus:outline-none py-2" id="province" onchange="fnActiveOrDeactivateBtnSendDataTeam(this.value.length >= 3,this)">
                         <option value="">Selecciona una provincia</option>
                         <option value="lima">Lima</option>
                         <option value="huaral">Huaral</option>
                     </select>
-                    <select class="border-b border-solid border-b-black focus:outline-none py-2" id="district">
+                    <select class="border-b border-solid border-b-black focus:outline-none py-2" id="district" onchange="fnActiveOrDeactivateBtnSendDataTeam(this.value.length >= 3,this)">
                         <option value="">Selecciona un distrito</option>
                         <option value="lurigancho">Lurigancho</option>
                         <option value="sjl">San Juan de Lurigancho</option>
@@ -42,25 +42,14 @@
                     <h2 class="font-bold text-base uppercase text-white">Datos del equipo</h2>
                 </div>
                 <button id="btn-add-speaker" class="flex align-middle items-center gap-1 disabled:cursor-not-allowed"
-                    onclick="fnDefineParticipantType(0);fnShowModal();setTitleModal('Añadir Orador');">
+                    onclick="fnDefineParticipantType(0);fnShowModal();setTitleModal('Añadir Orador');activateButtonAddSpeaker();">
                     <i class="fa-solid fa-circle-plus text-[#FF103D] text-base"></i>
                     <h5>Añadir orador</h5>
                 </button>
                 <div class="flex flex-col gap-3" id="speakers-container">
-                    <!-- <div class="flex justify-between bg-gray-200 px-3 py-2 items-center">
-                        <h3>Johnny Huama Villanueva</h3>
-                        <div class="flex gap-1">
-                            <div class="bg-[#FF103D] p-2">
-                                <i class="fa-solid fa-trash text-[10px] text-white"></i>
-                            </div>
-                            <div class="bg-gray-500 p-2">
-                                <i class="fa-solid fa-pencil text-[10px] text-white"></i>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
                 <button id="btn-add-teacher" class="flex align-middle items-center gap-1 disabled:cursor-not-allowed"
-                    onclick="fnDefineParticipantType(1);fnShowModal();setTitleModal('Añadir profesor responsable')">
+                    onclick="fnDefineParticipantType(1);fnShowModal();setTitleModal('Añadir profesor responsable');activateButtonAddSpeaker();">
                     <i class="fa-solid fa-circle-plus text-[#FF103D] text-base"></i>
                     <h5>Añadir profesor responsable</h5>
                 </button>
@@ -83,7 +72,7 @@
                 </div>
                 <div class="flex flex-col gap-2 pt-10 mx-5 text-sm">
                     <div class="flex gap-2 justify-start items-start">
-                        <input class="authorizationCheckId" type="checkbox" id="check1">
+                        <input class="authorizationCheckId" type="checkbox" id="check1" onclick="fnActiveOrDeactivateBtnSendDataTeam(this.checked,this)">
                         <a href="https://www.ue.edu.pe/pregrado/politica-de-privacidad" target="__blank">
                             <p class="text-[#FF103D] font-semibold -mt-1 hover:border-b hover:border-b-[#FF103D]">Acepto las condiciones de tratamiento para mis
                                 datos personales</p>
@@ -98,7 +87,7 @@
                         </p>
                     </div>
                     <div class="flex justify-end ">
-                        <button class="bg-[#DBDBDB] px-4 py-3" onclick="fnValidationDataBeforeRegistrationTeam()">
+                        <button class="bg-[#DBDBDB] px-4 py-3 disabled:cursor-not-allowed" id="btn-save-team" onclick="fnTeamRegister()" disabled>
                             Enviar Datos
                         </button>
                     </div>
@@ -111,52 +100,7 @@
 <?php include 'modal.php' ?>
 
 <script>
-    const speakers = [{
-            participantType: "teacher",
-            name: "David",
-            paternalname: "Alke",
-            maternalname: "Benavides",
-            email: "test@gmail.com",
-            age: "18",
-            race: "masculino",
-            phone: "123456789",
-            file: "http://localhost:8090/formulario/files/678597761f0ce_Libro1.pdf"
-        },
-        {
-            participantType: "speaker",
-            name: "Ernesto",
-            paternalname: "Benavides",
-            maternalname: "Alcides",
-            email: "test@gmail.com",
-            age: "18",
-            race: "masculino",
-            degree: "1",
-            phone: "123456789",
-            file: "http://localhost:8090/formulario/files/678597761f0ce_Libro1.pdf"
-        },
-        {
-            participantType: "speaker",
-            name: "Cristobal",
-            paternalname: "America",
-            maternalname: "Colon",
-            email: "test@gmail.com",
-            age: "18",
-            race: "masculino",
-            phone: "123456789",
-            file: "http://localhost:8090/formulario/files/678597761f0ce_Libro1.pdf"
-        },
-        {
-            participantType: "speaker",
-            name: "Adolfo",
-            paternalname: "Guzman",
-            maternalname: "Hank",
-            email: "test@gmail.com",
-            age: "18",
-            race: "masculino",
-            phone: "123456789",
-            file: "http://localhost:8090/formulario/files/678597761f0ce_Libro1.pdf"
-        }
-    ]
+    const speakers = [];
     let inputId = [];
     let participantType = "";
 
@@ -180,51 +124,23 @@
     const check1 = document.getElementById("check1");
     const check2 = document.getElementById("check2");
 
-    function fnValidationDataBeforeRegistrationTeam() {
+
+
+    function fnTeamRegister() {
         const data = {};
         data.schoolName = schoolName.value
         data.department = department.value
         data.province = province.value
         data.district = district.value
-        data.check1 = check1.checked
-        data.check2 = check2.checked
+        data.acceptDataPolicy = check1.checked
+        data.authorizeDataUsage = check2.checked
         data.team = speakers;
-        fnTeamRegister(data);
-
-    }
-
-    function fnTeamRegister(data) {
         console.log("data", data);
-    }
-
-    function fnChecked(event) {
-        console.log(inputcheckBox);
-        console.log("checked", event.target);
-    }
-
-    Array.from(inputcheckBox).forEach(checkbox => {
-        checkbox.addEventListener("change", fnChecked);
-    });
-
-    function fnShowModal() {
-
-        modal.style.display = "flex";
-        body.style.overflow = "hidden";
-    }
-    // body.style.overflow = "hidden";
-
-    function fnCloseModal() {
-        modal.style.display = "none";
-        body.style.overflow = "auto";
     }
 
     /* Form  Add Speaker Start*/
 
-    // New
-
     function validateInput(input, spanId) {
-        console.log("inputId", inputId, document.getElementById("titleModal").textContent);
-
         let existingSpan = document.getElementById(spanId);
         if (!existingSpan) {
             console.log("not exist ", spanId);
@@ -382,7 +298,6 @@
                     const formData = new FormData();
                     formData.append('file', file);
                     formData.append('basePath', <?= json_encode($basePath) ?>);
-
                     uploadPromise = fetch('upload.php', {
                             method: 'POST',
                             body: formData,
@@ -407,7 +322,6 @@
             } else {
                 data[id] = input.value;
             }
-
             input.value = "";
         });
 
@@ -415,17 +329,21 @@
 
         inputId = [];
         speakers.push(data);
-        console.log(speakers);
-
+        fnActiveOrDeactivateBtnSendDataTeam(speakers.filter(item => item.participantType === 'speaker').length >= 3, btnAddSpeaker);
+        fnActiveOrDeactivateBtnSendDataTeam(speakers.filter(item => item.participantType === 'teacher').length === 1, btnAddTeacher);
         fnCloseModal();
         fnPrevListSpeakers();
     }
 
+    function test() {
+        console.log("test");
+        
+    }
+
     async function fnUpdatedata() {
-        console.log("==============================================");
         const currentData = speakers[participantPosition.id];
-        const promises = []; // Promesas para manejar la subida del archivo
-        const basePath = <?= json_encode($basePath) ?>; // Evitar múltiples llamadas a PHP
+        const promises = [];
+        const basePath = <?= json_encode($basePath) ?>;
 
         inputId.forEach(async (id) => {
             const input = document.getElementById(id);
@@ -440,7 +358,6 @@
                         const formData = new FormData();
                         formData.append("file", file);
                         formData.append('basePath', <?= json_encode($basePath) ?>);
-
 
                         try {
                             const response = await fetch("upload.php", {
@@ -470,23 +387,20 @@
             } else {
                 currentData[id] = input.value;
             }
+            input.value = "";
         });
 
         if (promises.length > 0) {
             await Promise.all(promises);
         }
-
+        inputId = [];
         speakers[participantPosition.id] = currentData;
 
         fnPrevListSpeakers();
-
-        console.log("Datos actualizados:", currentData);
-        console.log("==============================================");
+        fnCloseModal();
     }
 
     async function deleteOldFile(filePath) {
-        console.log("deleteOldFile",filePath);
-        
         try {
             const response = await fetch("delete_file.php", {
                 method: "POST",
@@ -538,13 +452,6 @@
                 }
                 break;
         }
-        // if (inputId.length === 9 && participantType === "speaker") {
-        //     btnSaveSpeaker.disabled = false;
-        // } else if (inputId.length === 8 && participantType === "teacher") {
-        //     btnSaveSpeaker.disabled = false;
-        // } else {
-        //     btnSaveSpeaker.disabled = true;
-        // }
     }
 
     /* Form  Add Speaker End*/
@@ -577,8 +484,6 @@
         } else {
             valueParticipantType = 1;
         }
-        console.log("Dato", element);
-
         const speakerHTML = `
         <div class="flex justify-between bg-gray-200 px-3 py-2 items-center">
             <h3>${fullName}</h3>
@@ -606,7 +511,6 @@
 
     function fnEditParticipant(position) {
         const data = speakers[position];
-        console.log("edit", data);
         participantPosition.id = position;
         let text = "Actualizar Orador";
         if (data.participantType === "teacher") text = "Actualizar Profesor Responsable";
@@ -667,8 +571,7 @@
         console.log("Limit Participants", type, numberParticipants);
         switch (type) {
             case "speaker":
-                if (numberParticipants === 3) {
-                    console.log("speaker 3");
+                if (numberParticipants === 5) {
                     btnAddSpeaker.disabled = true;
                 } else {
                     btnAddSpeaker.disabled = false;
@@ -676,7 +579,6 @@
                 break;
             case "teacher":
                 if (numberParticipants === 1) {
-                    console.log("teacher 1");
                     btnAddTeacher.disabled = true;
                 } else {
                     btnAddTeacher.disabled = false;
@@ -688,9 +590,34 @@
 
     function fnDefineParticipantType(number) {
         console.log("fnDefineParticipantType", number);
-
         if (number === 0) participantType = 'speaker';
         if (number === 1) participantType = 'teacher';
+    }
+    let inputIdTeam = [];
 
+    function fnActiveOrDeactivateBtnSendDataTeam(condition, element) {
+
+        const btnSendData = document.getElementById("btn-save-team");
+        if (condition) {
+            if (!inputIdTeam.includes(element.id)) inputIdTeam.push(element.id);
+        } else {
+            inputIdTeam = inputIdTeam.filter(item => item !== element.id);
+        }
+        console.log(inputIdTeam.length,inputIdTeam);
+        
+        if (inputIdTeam.length >= 7) {
+            btnSendData.disabled = false;
+        } else {
+            btnSendData.disabled = true;
+        }
+    }
+
+    function fnCleanInputModal() {
+        inputId = ["name", "paternalname", "maternalname", "email", "age", "race", "phone", "file", "degree"]
+        inputId.forEach(element => {
+            const input = document.getElementById(element);
+            input.value = "";
+        });
+        inputId = [];
     }
 </script>

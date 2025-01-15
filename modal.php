@@ -23,6 +23,9 @@
             <div class="grow flex flex-col relative">
                 <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="email" type="email" placeholder="E-mail" onkeyup="validateInput(this,'email-error')">
             </div>
+            <div class="grow flex flex-col relative">
+                <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="dni" type="number" placeholder="DNI" onkeyup="validateInput(this,'dni-error')">
+            </div>
             <div class="w-full flex flex-col sm:flex-row sm:gap-4">
                 <div class="w-full  flex flex-col relative">
                     <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="age" type="text" min="1" max="99" placeholder="Edad" onkeyup="validateInput(this,'age-error')">
@@ -70,16 +73,15 @@
 
     const containDegree = document.getElementById("container-degree");
     const containPhone = document.getElementById("container-phone");
+    const titleModal = document.getElementById("titleModal");
     const btnModal = document.getElementById("btn-save-speaker");
-    function setTitleModal(participant) {
-        console.log("participantType",participantType,participant);
-        
-        document.getElementById("titleModal").textContent = participant;
-        if(participant.toLowerCase().includes("actualizar")) document.getElementById("btn-save-speaker").textContent = "Actualizar";
-        
-        // document.getElementById("titleModal").textContent = participant;
+    
+    function setTitleModal(participant) {        
+        titleModal.textContent = participant;
+        if(participant.toLowerCase().includes("actualizar")) btnModal.textContent = "Actualizar";
+        else btnModal.textContent = "Agregar";
+
         if (participant.toLowerCase().includes("profesor")) {
-            
             containDegree.classList.add("hidden");
             containPhone.classList.remove("w-full");
             containPhone.classList.add("w-1/2","pr-2");
@@ -91,7 +93,18 @@
     }
 
     function isSaveOrUpdate(){
-        if(document.getElementById("titleModal").textContent.toLowerCase().includes("actualizar")) fnUpdatedata();
+        if(titleModal.textContent.toLowerCase().includes("actualizar")) fnUpdatedata();
         else fnSaveData();
+    }
+
+    function fnShowModal() {
+        modal.style.display = "flex";
+        body.style.overflow = "hidden";
+    }
+
+    function fnCloseModal() {
+        if (titleModal.textContent.toLowerCase().includes("actualizar")) fnCleanInputModal();
+        modal.style.display = "none";
+        body.style.overflow = "auto";
     }
 </script>
