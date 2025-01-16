@@ -16,26 +16,53 @@
             <div class="">
                 <div class="px-8 py-1 rounded-xl bg-[#FF103D]">
                     <h2 class="font-bold text-base uppercase text-white">Datos de la institución</h2>
-                </div>
+                </div>	
+				<input type="hidden" name="ueidCentro" id="ueidCentro"  value="">
                 <div class="pt-7 grid grid-cols-2 gap-x-10 gap-y-8">
-                    <input class="border-b border-solid border-b-black focus:outline-none py-2" onkeyup="fnActiveOrDeactivateBtnSendDataTeam(this.value.length >= 3,this)" type="text"
-                        placeholder="Nombre del colegio" id="schoolName">
-                    <select class="border-b border-solid border-b-black focus:outline-none py-2" id="department" onchange="fnActiveOrDeactivateBtnSendDataTeam(this.value.length >= 3,this)">
-                        <option value="">Selecciona un departamento</option>
-                        <option value="lima">Lima</option>
-                        <option value="arequipa">Arequipa</option>
+                    <select class="border-b border-solid border-b-black focus:outline-none py-2" id="department" onchange="fnActiveOrDeactivateBtnSendDataTeam(this.value.length >= 1,this)">
+				    <option value="">Departamento del colegio</option>
+					<option value="01">AMAZONAS</option>
+					<option value="02">ANCASH</option>
+					<option value="03">APURIMAC</option>
+					<option value="04">AREQUIPA</option>
+					<option value="05">AYACUCHO</option>
+					<option value="06">CAJAMARCA</option>
+					<option value="24">CALLAO</option>
+					<option value="07">CUSCO</option>
+					<option value="00">EXTRANJERO</option>
+					<option value="08">HUANCAVELICA</option>
+					<option value="09">HUANUCO</option>
+					<option value="10">ICA</option>
+					<option value="11">JUNIN</option>
+					<option value="12">LA LIBERTAD</option>
+					<option value="13">LAMBAYEQUE</option>
+					<option value="14">LIMA</option>
+					<option value="15">LORETO</option>
+					<option value="16">MADRE DE DIOS</option>
+					<option value="17">MOQUEGUA</option>
+					<option value="18">PASCO</option>
+					<option value="19">PIURA</option>
+					<option value="20">PUNO</option>
+					<option value="21">SAN MARTIN</option>
+					<option value="22">TACNA</option>
+					<option value="23">TUMBES</option>
+					<option value="25">UCAYALI</option>	
                     </select>
-                    <select class="border-b border-solid border-b-black focus:outline-none py-2" id="province" onchange="fnActiveOrDeactivateBtnSendDataTeam(this.value.length >= 3,this)">
+                    <select class="border-b border-solid border-b-black focus:outline-none py-2" id="province" name="province" onchange="fnActiveOrDeactivateBtnSendDataTeam(this.value.length >= 1,this)">
                         <option value="">Selecciona una provincia</option>
                         <option value="lima">Lima</option>
                         <option value="huaral">Huaral</option>
                     </select>
-                    <select class="border-b border-solid border-b-black focus:outline-none py-2" id="district" onchange="fnActiveOrDeactivateBtnSendDataTeam(this.value.length >= 3,this)">
+                    <select class="border-b border-solid border-b-black focus:outline-none py-2" id="district" name="district" onchange="fnActiveOrDeactivateBtnSendDataTeam(this.value.length >= 1,this)">
                         <option value="">Selecciona un distrito</option>
                         <option value="lurigancho">Lurigancho</option>
                         <option value="sjl">San Juan de Lurigancho</option>
                     </select>
+                    <input class="border-b border-solid border-b-black focus:outline-none py-2" onkeyup="fnActiveOrDeactivateBtnSendDataTeam(this.value.length >= 3,this)" type="text"
+                        placeholder="Nombre del colegio" id="schoolName">					
                 </div>
+				
+			
             </div>
             <div class="flex flex-col gap-4">
                 <div class="px-8 py-1 rounded-xl bg-[#FF103D]">
@@ -124,18 +151,31 @@
     const check1 = document.getElementById("check1");
     const check2 = document.getElementById("check2");
 
-
-
     function fnTeamRegister() {
         const data = {};
-        data.schoolName = schoolName.value
-        data.department = department.value
-        data.province = province.value
-        data.district = district.value
-        data.acceptDataPolicy = check1.checked
-        data.authorizeDataUsage = check2.checked
+        data.schoolName = schoolName.value;
+        data.department = department.value;
+        data.province = province.value;
+        data.district = district.value;
+        data.acceptDataPolicy = check1.checked;
+        data.authorizeDataUsage = check2.checked;
+        data.ueidCentro = "";
         data.team = speakers;
         console.log("data", data);
+		
+		$.ajax({
+			url: 'regorador.php',
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify(data),
+			success: function (response) {
+				console.log(response);
+			},
+			error: function (xhr, status, error) {
+				console.error(error);
+			}
+		});
+		
     }
 
     /* Form  Add Speaker Start*/
@@ -329,6 +369,8 @@
 
         inputId = [];
         speakers.push(data);
+        console.log(speakers);
+        
         fnActiveOrDeactivateBtnSendDataTeam(speakers.filter(item => item.participantType === 'speaker').length >= 3, btnAddSpeaker);
         fnActiveOrDeactivateBtnSendDataTeam(speakers.filter(item => item.participantType === 'teacher').length === 1, btnAddTeacher);
         fnCloseModal();
@@ -436,7 +478,7 @@
         switch (participantType) {
             case "speaker":
                 console.log("case speaker");
-                if (inputId.length === 9) {
+                if (inputId.length === 10) {
                     console.log("Length 9");
                     btnSaveSpeaker.disabled = false;
                 } else {
@@ -445,7 +487,7 @@
                 break;
             case "teacher":
                 console.log("case teacher");
-                if (inputId.length === 8 && participantType === "teacher") {
+                if (inputId.length === 9 && participantType === "teacher") {
                     btnSaveSpeaker.disabled = false;
                 } else {
                     btnSaveSpeaker.disabled = true;
@@ -596,20 +638,27 @@
     let inputIdTeam = [];
 
     function fnActiveOrDeactivateBtnSendDataTeam(condition, element) {
-
-        const btnSendData = document.getElementById("btn-save-team");
-        if (condition) {
-            if (!inputIdTeam.includes(element.id)) inputIdTeam.push(element.id);
-        } else {
-            inputIdTeam = inputIdTeam.filter(item => item !== element.id);
-        }
-        console.log(inputIdTeam.length,inputIdTeam);
-        
-        if (inputIdTeam.length >= 7) {
-            btnSendData.disabled = false;
-        } else {
-            btnSendData.disabled = true;
-        }
+		if(element.id == "department")
+		{
+			provincia(element.value)
+		}
+		else
+		{
+			const btnSendData = document.getElementById("btn-save-team");
+			if (condition) {
+				if (!inputIdTeam.includes(element.id)) inputIdTeam.push(element.id);
+			} else {
+				inputIdTeam = inputIdTeam.filter(item => item !== element.id);
+			}
+			console.log(inputIdTeam.length,inputIdTeam);
+			
+			if (inputIdTeam.length >= 7) {
+				btnSendData.disabled = false;
+			} else {
+				btnSendData.disabled = true;
+			}
+			
+		}
     }
 
     function fnCleanInputModal() {
@@ -620,4 +669,38 @@
         });
         inputId = [];
     }
+	
+		function provincia(dpto)
+	{
+		alert(dpto);
+		const selectElementDist = document.querySelector('select[name="district"]');
+		selectElementDist.innerHTML = '';
+					
+
+		prov = "00";
+		$(document).ready(function(){
+		// Enviar solicitud AJAX al archivo PHP
+		vurl = "/pregrado/components/com_content/helpers/listaws.php?op=1&id="+dpto+"&idprov="+prov+"&iddpto="+dpto;
+		$.ajax({
+				url: vurl,
+				type: "GET",
+				dataType: "json",
+				success: function(data) 
+				{
+					const selectElement = document.querySelector('select[name="province"]');
+					selectElement.innerHTML = '';
+					data.forEach(objeto => {
+					const option = document.createElement('option'); // Crear un elemento <option>
+					option.value = objeto.id; // Asignar el valor del objeto 'id' como valor de la opción
+					option.text = objeto.nombre; // Asignar el valor del objeto 'nombre' como texto de la opción
+					selectElement.appendChild(option); // Agregar la opción al elemento <select>						
+					});
+
+				},
+				error: function() {
+					$("#tabla-provincias").html("Error al cargar las provincias");
+				}
+			});
+		});
+	}
 </script>

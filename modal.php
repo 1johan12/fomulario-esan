@@ -10,49 +10,45 @@
                 <i class="fa-solid fa-xmark text-[#fff]"></i>
             </button>
         </div>
-        <div class="p-7 flex w-full gap-x-4 flex-wrap">
-            <div class="grow flex flex-col relative">
+        <div class="p-7 grid grid-cols-2 w-full gap-x-4 ">
+            <div class="flex flex-col relative">
                 <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="name" type="text" placeholder="Nombres" onkeyup="validateInput(this,'name-error')">
             </div>
-            <div class="grow flex flex-col relative">
+            <div class="flex flex-col relative">
                 <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="paternalname" type="text" placeholder="Apellido paterno" onkeyup="validateInput(this,'paternalname-error')">
             </div>
-            <div class="grow flex flex-col relative">
+            <div class="flex flex-col relative">
                 <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="maternalname" type="text" placeholder="Apellido materno" onkeyup="validateInput(this,'maternalname-error')">
             </div>
-            <div class="grow flex flex-col relative">
+            <div class="flex flex-col relative">
                 <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="email" type="email" placeholder="E-mail" onkeyup="validateInput(this,'email-error')">
             </div>
-            <div class="grow flex flex-col relative">
+            <div class="flex flex-col relative">
                 <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="dni" type="number" placeholder="DNI" onkeyup="validateInput(this,'dni-error')">
             </div>
-            <div class="w-full flex flex-col sm:flex-row sm:gap-4">
-                <div class="w-full  flex flex-col relative">
-                    <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="age" type="text" min="1" max="99" placeholder="Edad" onkeyup="validateInput(this,'age-error')">
-                </div>
-                <div class="w-full  flex flex-col relative">
-                    <select class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5 h-[42px]" id="race" onchange="validateInput(this,'race-error')">
-                        <option value="">Género</option>
-                        <option value="masculino">Masculino</option>
-                        <option value="femenino">Femenino</option>
-                    </select>
-                </div>
+            <div class=" flex flex-col relative">
+                <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="age" type="text" min="1" max="99" placeholder="Edad" onkeyup="validateInput(this,'age-error')">
             </div>
-            <div class="w-full flex flex-col sm:flex-row sm:gap-4">
-                <div class="w-full flex-col relative" id="container-degree">
-                    <select class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5 h-[42px]" id="degree" onchange="validateInput(this,'degree-error')">
-                        <option value="">Grado</option>
-                        <option value="1">Tercer Año</option>
-                        <option value="4">Cuarto Año</option>
-                        <option value="6">Quinto Año</option>
-                    </select>
-                </div>
-                <div class="w-full flex flex-col relative" id="container-phone">
-                    <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="phone" type="number" min="1" max="999999999" placeholder="Celular" onkeyup="validateInput(this,'phone-error')">
-                </div>
+            <div class="w-full  flex flex-col relative">
+                <select class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5 h-[42px]" id="race" onchange="validateInput(this,'race-error')">
+                    <option value="">Género</option>
+                    <option value="masculino">Masculino</option>
+                    <option value="femenino">Femenino</option>
+                </select>
+            </div>
+            <div class="w-full flex-col relative" id="container-degree">
+                <select class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5 h-[42px]" id="degree" onchange="validateInput(this,'degree-error')">
+                    <option value="">Grado</option>
+                    <option value="1">Tercer Año</option>
+                    <option value="4">Cuarto Año</option>
+                    <option value="6">Quinto Año</option>
+                </select>
+            </div>
+            <div class="flex flex-col relative" id="container-phone">
+                <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="phone" type="number" min="1" max="999999999" placeholder="Celular" onkeyup="validateInput(this,'phone-error')">
             </div>
 
-            <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-2 col-span-2">
                 <h3 class="p-1 bg-[#ff103d] text-white text-[10px]">
                     Cada participante deberá adjuntar el formato de consentimiento con sus nombres completos como título del archivo.
                 </h3>
@@ -70,30 +66,29 @@
 </div>
 
 <script>
-
     const containDegree = document.getElementById("container-degree");
     const containPhone = document.getElementById("container-phone");
     const titleModal = document.getElementById("titleModal");
     const btnModal = document.getElementById("btn-save-speaker");
-    
-    function setTitleModal(participant) {        
+
+    function setTitleModal(participant) {
         titleModal.textContent = participant;
-        if(participant.toLowerCase().includes("actualizar")) btnModal.textContent = "Actualizar";
+        if (participant.toLowerCase().includes("actualizar")) btnModal.textContent = "Actualizar";
         else btnModal.textContent = "Agregar";
 
         if (participant.toLowerCase().includes("profesor")) {
             containDegree.classList.add("hidden");
-            containPhone.classList.remove("w-full");
-            containPhone.classList.add("w-1/2","pr-2");
-        }else{
+            // containPhone.classList.remove("w-full");
+            // containPhone.classList.add("w-1/2", "pr-2");
+        } else {
             containDegree.classList.remove("hidden");
-            containPhone.classList.add("w-full");
-            containPhone.classList.remove("w-1/2","pr-2");
+            // containPhone.classList.add("w-full");
+            // containPhone.classList.remove("w-1/2", "pr-2");
         }
     }
 
-    function isSaveOrUpdate(){
-        if(titleModal.textContent.toLowerCase().includes("actualizar")) fnUpdatedata();
+    function isSaveOrUpdate() {
+        if (titleModal.textContent.toLowerCase().includes("actualizar")) fnUpdatedata();
         else fnSaveData();
     }
 
