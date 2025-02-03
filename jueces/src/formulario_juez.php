@@ -3,10 +3,10 @@
         <input class="min-w-full border-b border-solid border-b-black focus:outline-none py-2" type="text" placeholder="Nombre" id="name" onkeyup="fnValidateInput(this)">
     </div>
     <div class="flex flex-col relative pb-5">
-        <input class="min-w-full border-b border-solid border-b-black focus:outline-none py-2" type="text" placeholder="Apellido paterno" id="paternalname" onkeyup="fnValidateInput(this)">
+        <input class="min-w-full border-b border-solid border-b-black focus:outline-none py-2" type="text" placeholder="Apellido paterno" id="paternalLastname" onkeyup="fnValidateInput(this)">
     </div>
     <div class="flex flex-col relative pb-5">
-        <input class="min-w-full border-b border-solid border-b-black focus:outline-none py-2" type="text" placeholder="Apellido materno" id="maternalname" onkeyup="fnValidateInput(this)">
+        <input class="min-w-full border-b border-solid border-b-black focus:outline-none py-2" type="text" placeholder="Apellido materno" id="maternalLastname" onkeyup="fnValidateInput(this)">
     </div>
     <div class="flex flex-col relative pb-5">
         <select class="min-w-full border-b border-solid border-b-black focus:outline-none py-2" id="documentType" onchange="fnValidateInput(this)">
@@ -19,9 +19,9 @@
     <div class="flex flex-col relative pb-5">
         <input class="min-w-full border-b border-solid border-b-black focus:outline-none py-2" type="number" placeholder="Nro identificación" id="identificationNumber" onkeyup="fnValidateInput(this)" disabled>
     </div>
-    <div class="flex flex-col relative pb-5">
+    <!-- <div class="flex flex-col relative pb-5">
         <input class="min-w-full border-b border-solid border-b-black focus:outline-none py-2" type="number" placeholder="Edad" id="age" onkeyup="fnValidateInput(this)">
-    </div>
+    </div> -->
     <div class="flex flex-col relative pb-5">
         <select class="min-w-full border-b border-solid border-b-black focus:outline-none py-2" id="race" onchange="fnValidateInput(this)">
             <option value="">Género</option>
@@ -36,7 +36,7 @@
         <input class="min-w-full border-b border-solid border-b-black focus:outline-none py-2" type="text" placeholder="Código de País" id="countryCode" onkeyup="fnValidateInput(this)">
     </div> -->
     <div class="flex flex-col relative pb-5">
-        <input class="min-w-full border-b border-solid border-b-black focus:outline-none py-2" type="number" placeholder="Celular" id="phone" onkeyup="fnValidateInput(this)">
+        <input class="min-w-full border-b border-solid border-b-black focus:outline-none py-2" type="number" min="900000000"  placeholder="Celular" id="phone" onkeyup="fnValidateInput(this)">
     </div>
     <div class="flex flex-col relative pb-5">
         <select class="min-w-full border-b border-solid border-b-black focus:outline-none py-2" id="country" onchange="fnValidateInput(this)">
@@ -45,7 +45,7 @@
     </div>
     <div class="flex relative pb-5 justify-between items-end">
         <div>
-            <input type="radio" id="independentOrInstitution" name="IndependentOrInstitution" value="indepent" onclick="fnValidateInput(this)" />
+            <input type="radio" id="independentOrInstitution" name="IndependentOrInstitution" value="independiente" onclick="fnValidateInput(this)" />
             <label for="contactChoice1">Independiente</label>
         </div>
         <div>
@@ -118,8 +118,6 @@
             input.classList.add("border-b-red-600", "border-b-2");
             inputId = inputId.filter(item => item !== input.id);
         }
-        console.log(inputId);
-
     }
 
     function fnValidateInput(input) {
@@ -180,21 +178,23 @@
     function getMessage(inputIdMessage) {
         const messages = {
             name: "Nombre obligatorio*",
-            paternalname: "Apellido paterno obligatorio*",
-            maternalname: "Apellido materno obligatorio*",
+            paternalLastname: "Apellido paterno obligatorio*",
+            maternalLastname: "Apellido materno obligatorio*",
             dni: "El dni debe contener 8 digitos*",
-            carnet_de_extranjeria: "Carnet de extranjería es obligatorio",
-            pasaporte: "Pasaporte es obligatorio",
+            carnet_de_extranjeria: "Carnet de extranjería es obligatorio*",
+            pasaporte: "Pasaporte es obligatorio*",
             email: "El correo no es válido.*",
             age: "Edad es obligatorio*",
             race: "El genero es obligatorio*",
             phone: "El celular es obligatorio*",
-            countryCode: "Código de País Obligatorio",
-            country: "Pais Obligatorio",
-            city: "Ciudad es Obligatorio",
-            nationality: "Nacionalidad es Obligatorio",
-            institutionName: "Nombre de la institucion obligatorio",
-            file: "Selecciona un archivo*"
+            countryCode: "Código de País Obligatorio*",
+            country: "Pais Obligatorio*",
+            city: "Ciudad es Obligatorio*",
+            nationality: "Nacionalidad es Obligatorio*",
+            institutionName: "Nombre de la institucion obligatorio*",
+            file: "Selecciona un archivo*",
+            documentType:"Seleccione tipo de doc*",
+            acceptDataPolicy: "*",
         };
         return messages[inputIdMessage] || "Error no especificado.";
     }
@@ -202,8 +202,8 @@
     let condition;
 
     function fnActivateButtonRegisterJugde() {
-        let conditionNumber = 12;
-        if (independentOrInstitution === "institution") conditionNumber = 13;
+        let conditionNumber = 11;
+        if (independentOrInstitution === "institution") conditionNumber = 12;
         if (inputId.length === conditionNumber) btnSaveJugde.disabled = false;
         else btnSaveJugde.disabled = true;
     }

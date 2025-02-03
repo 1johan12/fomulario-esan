@@ -1,7 +1,7 @@
 <!-- Modal -->
 <div class="fixed  bg-[#00000094] justify-center items-center inset-0 flex hidden" id="ue_modal">
-    <div class=" bg-white w-[500px] shadow-[rgba(0,0,0,0.25)_0px_14px_28px,rgba(0,0,0,0.22)_0px_10px_10px] flex justify-center items-center flex-col rounded-lg">
-        <div class="flex justify-between w-full p-4 border-b bg-[#ff103d] border-[#e9ecef] border-solid items-center text-[1.25rem] rounded-t-lg">
+    <div class=" bg-white overflow-auto max-h-full  sm:overflow-hidden sm:w-[500px] shadow-[rgba(0,0,0,0.25)_0px_14px_28px,rgba(0,0,0,0.22)_0px_10px_10px] sm:flex justify-center items-center flex-col rounded-lg">
+        <div class="flex justify-between w-full p-4 border-b bg-[#e3173e] border-[#e9ecef] border-solid items-center text-[1.25rem] rounded-t-lg">
             <div class="font-medium text-white">
                 <h2 id="titleModal"></h2>
                 <span class="hidden participantPosition"></span>
@@ -10,7 +10,7 @@
                 <i class="fa-solid fa-xmark text-[#fff]"></i>
             </button>
         </div>
-        <div class="p-7 grid grid-cols-2 w-full gap-x-4 ">
+        <div class="p-7 sm:grid sm:grid-cols-2 sm:w-full sm:gap-x-4 ">
             <div class="flex flex-col relative">
                 <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="name" type="text" placeholder="Nombres" onkeyup="validateInput(this,'name-error')">
             </div>
@@ -26,7 +26,7 @@
             <div class="flex flex-col relative">
                 <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="dni" type="number" placeholder="DNI" onkeyup="validateInput(this,'dni-error')">
             </div>
-            <div class=" flex flex-col relative">
+            <div class=" flex flex-col relative" id="container-age">
                 <input class="w-full border border-solid focus:outline-none rounded-lg p-2 mb-5" id="age" type="text" min="1" max="99" placeholder="Edad" onkeyup="validateInput(this,'age-error')">
             </div>
             <div class="w-full  flex flex-col relative">
@@ -49,7 +49,7 @@
             </div>
 
             <div class="flex flex-col gap-2 col-span-2">
-                <h3 class="p-1 bg-[#ff103d] text-white text-[10px]">
+                <h3 class="p-1 bg-[#e3173e] text-white text-[10px]">
                     Cada participante deberá adjuntar el formato de consentimiento con sus nombres completos como título del archivo.
                 </h3>
                 <div class="flex flex-col relative">
@@ -58,14 +58,15 @@
             </div>
         </div>
         <div class=" w-full border-t border-t-solid border-t-[#e9ecef] p-4 flex justify-end gap-2">
-            <button class="px-3 py-[6px] bg-[#ff103d] text-white rounded-md text-base" onclick="fnCloseModal()">Cancel</button>
-            <button class="px-3 py-[6px] bg-[#6c757d] text-white rounded-md text-base tracking-wide disabled:cursor-not-allowed" id="btn-save-speaker" onclick="isSaveOrUpdate()" disabled>Agregar</button>
+            <button class="px-3 py-[6px]  bg-[#6c757d] text-white rounded-md text-base" onclick="fnCloseModal()">Cancel</button>
+            <button class="px-3 py-[6px] text-white rounded-md text-base tracking-wide disabled:cursor-not-allowed bg-[#e3173e]" id="btn-save-speaker" onclick="isSaveOrUpdate()" disabled>Agregar</button>
             <!-- <button class="px-3 py-[6px] bg-[#6c757d] text-white rounded-md text-base tracking-wide disabled:cursor-not-allowed" id="btn-update-speaker" onclick="fnUpdateData()" disabled>Actualizar</button> -->
         </div>
     </div>
 </div>
 
 <script>
+	const containAge = document.getElementById("container-age");
     const containDegree = document.getElementById("container-degree");
     const containPhone = document.getElementById("container-phone");
     const titleModal = document.getElementById("titleModal");
@@ -78,10 +79,12 @@
 
         if (participant.toLowerCase().includes("profesor")) {
             containDegree.classList.add("hidden");
+			containAge.classList.add("hidden");
             // containPhone.classList.remove("w-full");
             // containPhone.classList.add("w-1/2", "pr-2");
         } else {
             containDegree.classList.remove("hidden");
+			containAge.classList.remove("hidden");
             // containPhone.classList.add("w-full");
             // containPhone.classList.remove("w-1/2", "pr-2");
         }
